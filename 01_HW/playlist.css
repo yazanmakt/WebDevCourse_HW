@@ -1,0 +1,112 @@
+/* header title */
+h2 {
+    text-align: center;
+    color: #1C6EA4;
+    margin-top: 30px;
+    font-size: 28px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* overall page */
+body {
+    background-color: #ecebeb;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* main table styling */
+.video-table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color: #fdfdfd;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* header cells */
+.video-table th {
+    background: linear-gradient(to right, #1C6EA4, #2388CB);
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 14px;
+    border: none;
+}
+
+/* body cells */
+.video-table td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+    vertical-align: middle;
+    background-color: #f7f7f7;
+    transition: background-color 0.s ease;
+}
+
+/* zebra stripe rows */
+.video-table tbody tr:nth-child(even) td {
+    background-color: #efefef;
+}
+
+/* hover effect for entire row */
+.video-table tbody tr:hover td {
+    background-color: #e3f2fd;
+}
+
+/* thumbnails */
+.video-table img {
+    width: 200px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.video-table img:hover {
+    transform: scale(1.05);
+}
+
+/* watch button */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 25px;
+    border: none;
+    background: linear-gradient(to right, #1C6EA4, #2388CB);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    background: linear-gradient(to right, #155d89, #1C6EA4);
+    transform: translateY(-2px);
+}
+
+/* responsive layout */
+@media (max-width: 768px) {
+    .video-table {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .video-table img {
+        width: 150px;
+        height: 84px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+}
