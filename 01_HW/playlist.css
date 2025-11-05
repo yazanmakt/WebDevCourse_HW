@@ -94,6 +94,11 @@ body {
     transform: translateY(-2px);
 }
 
+.newblue {
+    background-color: #1C6EA4;
+    color: #ffffff
+}
+
 /* responsive layout */
 @media (max-width: 768px) {
     .video-table {
