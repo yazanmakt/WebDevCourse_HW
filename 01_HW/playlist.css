@@ -100,7 +100,17 @@ body {
     color: #ffffff
 }
 
+.songlink {
+    color: #1C6EA4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
 
+.songlink:hover {
+    color: #003366;
+    text-decoration: underline;
+}
 
 /* responsive layout */
 @media (max-width: 768px) {
