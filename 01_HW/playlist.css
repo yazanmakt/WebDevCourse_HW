@@ -30,15 +30,6 @@ body {
     overflow: hidden;
 }
 
-/* header cells */
-.video-table th {
-    background: linear-gradient(to right, #1C6EA4, #2388CB);
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    padding: 14px;
-    border: none;
-}
 
 /* body cells */
 .video-table td {
@@ -56,9 +47,19 @@ body {
     background-color: #efefef;
 }
 
-/* hover effect for entire row */
+/* hover effect for entire row 
 .video-table tbody tr:hover td {
     background-color: #e3f2fd;
+}
+    */
+
+
+/* header cells */
+.video-table tr.highlight td {
+    background-color: #9bb8d7;
+    color: #003366;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 /* thumbnails */
@@ -98,6 +99,8 @@ body {
     background-color: #1C6EA4;
     color: #ffffff
 }
+
+
 
 /* responsive layout */
 @media (max-width: 768px) {
