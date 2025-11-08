@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Tags Reference - Comprehensive List</title>
+    <link rel="stylesheet" href="../SKINS/modern.css">
+
+</head>
+
+<body>
+    <header>
+        <h1>Complete HTML Tags Reference Guide</h1>
+        <p>A comprehensive demonstration of HTML tags without CSS styling</p>
+    </header>
+
+    <nav>
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="#document">Document Structure</a></li>
+            <li><a href="#text">Text Content</a></li>
+            <li><a href="#forms">Forms</a></li>
+            <li><a href="#media">Media</a></li>
+            <li><a href="#tables">Tables</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <article id="document">
+            <h2>Document Structure Tags</h2>
+            <section>
+                <h3>Sectioning Elements</h3>
+                <p>These tags help structure your document semantically.</p>
+                <header>Header element - typically contains introductory content</header>
+                <nav>Nav element - contains navigation links</nav>
+                <main>Main element - primary content of document</main>
+                <section>Section element - thematic grouping of content</section>
+                <article>Article element - self-contained composition</article>
+                <aside>Aside element - tangentially related content</aside>
+                <footer>Footer element - contains footer information</footer>
+            </section>
+        </article>
+
+        <article id="text">
+            <h2>Text Content Tags</h2>
+
+            <section>
+                <h3>Headings</h3>
+                <h1>Heading Level 1 - Main Title</h1>
+                <h2>Heading Level 2 - Major Section</h2>
+                <h3>Heading Level 3 - Subsection</h3>
+                <h4>Heading Level 4 - Minor Subsection</h4>
+                <h5>Heading Level 5 - Small Heading</h5>
+                <h6>Heading Level 6 - Smallest Heading</h6>
+            </section>
+
+            <section>
+                <h3>Paragraph and Text Formatting</h3>
+                <p>This is a paragraph tag. It represents a paragraph of text content.</p>
+                <p>This is <strong>strong text</strong> which indicates importance.</p>
+                <p>This is <b>bold text</b> which draws attention without importance.</p>
+                <p>This is <em>emphasized text</em> which adds stress emphasis.</p>
+                <p>This is <i>italic text</i> for alternate voice or mood.</p>
+                <p>This is <mark>marked/highlighted text</mark> for reference.</p>
+                <p>This is <small>small text</small> for side comments.</p>
+                <p>This is <del>deleted text</del> representing removed content.</p>
+                <p>This is <ins>inserted text</ins> representing added content.</p>
+                <p>This is <sub>subscript</sub> text for formulas like H<sub>2</sub>O.</p>
+                <p>This is <sup>superscript</sup> text for exponents like E=mc<sup>2</sup>.</p>
+                <p>This is <u>underlined text</u> for stylistic purposes.</p>
+                <p>This is <s>strikethrough text</s> for no longer accurate content.</p>
+                <p>This is <abbr title="HyperText Markup Language">HTML</abbr> - abbreviation tag.</p>
+                <p>This is <cite>a citation</cite> for referencing work titles.</p>
+                <p>This is <code>inline code</code> for computer code.</p>
+                <p>This is <kbd>keyboard input</kbd> like Ctrl+C.</p>
+                <p>This is <samp>sample output</samp> from a program.</p>
+                <p>This is <var>variable</var> for mathematical/programming variables.</p>
+                <p>This is <q>a short inline quotation</q> with quotes.</p>
+                <p>This is <dfn>definition term</dfn> for defining instances.</p>
+                <p>This is <time datetime="2025-11-03">a time element</time>.</p>
+                <p>This is <data value="12345">data with machine-readable value</data>.</p>
+            </section>
+
+            <section>
+                <h3>Block Quotations and Preformatted Text</h3>
+                <blockquote cite="https://example.com">
+                    This is a block quotation. It represents a section quoted from another source.
+                    It can span multiple lines and is typically indented.
+                </blockquote>
+
+                <pre>
+This is preformatted text.
+    It preserves    spaces
+        and line breaks
+            exactly as written.
+                </pre>
+
+                <figure>
+                    <pre><code>
+function example() {
+    console.log("Code block example");
+    return true;
+}
+                    </code></pre>
+                    <figcaption>Figure 1: Example JavaScript function</figcaption>
+                </figure>
+            </section>
+
+            <section>
+                <h3>Lists</h3>
+                <h4>Unordered List (ul)</h4>
+                <ul>
+                    <li>First unordered item</li>
+                    <li>Second unordered item</li>
+                    <li>Third unordered item with nested list:
+                        <ul>
+                            <li>Nested item 1</li>
+                            <li>Nested item 2</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>Ordered List (ol)</h4>
+                <ol>
+                    <li>First ordered item</li>
+                    <li>Second ordered item</li>
+                    <li>Third ordered item</li>
+                </ol>
+
+                <h4>Description List (dl)</h4>
+                <dl>
+                    <dt>HTML</dt>
+                    <dd>HyperText Markup Language - the standard markup language for web pages</dd>
+                    <dt>CSS</dt>
+                    <dd>Cascading Style Sheets - used for styling HTML documents</dd>
+                    <dt>JavaScript</dt>
+                    <dd>Programming language that enables interactive web pages</dd>
+                </dl>
+            </section>
+
+            <section>
+                <h3>Line Breaks and Horizontal Rules</h3>
+                <p>This text has a line break<br>right here using the br tag.</p>
+                <p>Below is a horizontal rule (hr tag):</p>
+                <hr>
+                <p>The hr tag creates a thematic break between content.</p>
+            </section>
+
+            <section>
+                <h3>Ruby Annotations</h3>
+                <p>
+                    <ruby>
+                        漢字<rp>(</rp>
+                        <rt>かんじ</rt>
+                        <rp>)</rp>
+                    </ruby>
+                    - Ruby annotations for pronunciation guides
+                </p>
+            </section>
+        </article>
+
+        <article id="forms">
+            <h2>Form Elements</h2>
+
+            <section>
+                <h3>Basic Form Structure</h3>
+                <form action="#" method="post">
+                    <fieldset>
+                        <legend>Personal Information</legend>
+
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name">
+                        <br><br>
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                        <br><br>
+
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password">
+                        <br><br>
+
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                        <br><br>
+
+                        <label for="url">Website:</label>
+                        <input type="url" id="url" name="url" placeholder="https://example.com">
+                        <br><br>
+
+                        <label for="number">Age:</label>
+                        <input type="number" id="number" name="age" min="0" max="120">
+                        <br><br>
+
+                        <label for="range">Volume:</label>
+                        <input type="range" id="range" name="volume" min="0" max="100">
+                        <br><br>
+
+                        <label for="date">Birth Date:</label>
+                        <input type="date" id="date" name="birthdate">
+                        <br><br>
+
+                        <label for="time">Preferred Time:</label>
+                        <input type="time" id="time" name="time">
+                        <br><br>
+
+                        <label for="datetime">Appointment:</label>
+                        <input type="datetime-local" id="datetime" name="appointment">
+                        <br><br>
+
+                        <label for="month">Birth Month:</label>
+                        <input type="month" id="month" name="birthmonth">
+                        <br><br>
+
+                        <label for="week">Select Week:</label>
+                        <input type="week" id="week" name="week">
+                        <br><br>
+
+                        <label for="color">Favorite Color:</label>
+                        <input type="color" id="color" name="color">
+                        <br><br>
+
+                        <label for="search">Search:</label>
+                        <input type="search" id="search" name="search" placeholder="Search...">
+                        <br><br>
+
+                        <label for="file">Upload File:</label>
+                        <input type="file" id="file" name="file" multiple>
+                        <br><br>
+
+                        <label for="hidden">Hidden Input (not visible):</label>
+                        <input type="hidden" id="hidden" name="hidden" value="secret_value">
+                        <br><br>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Preferences</legend>
+
+                        <label>Gender:</label><br>
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Male</label><br>
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Female</label><br>
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other">Other</label>
+                        <br><br>
+
+                        <label>Interests:</label><br>
+                        <input type="checkbox" id="sports" name="interests" value="sports">
+                        <label for="sports">Sports</label><br>
+                        <input type="checkbox" id="music" name="interests" value="music">
+                        <label for="music">Music</label><br>
+                        <input type="checkbox" id="reading" name="interests" value="reading">
+                        <label for="reading">Reading</label><br>
+                        <input type="checkbox" id="coding" name="interests" value="coding">
+                        <label for="coding">Coding</label>
+                        <br><br>
+
+                        <label for="country">Country:</label>
+                        <select id="country" name="country">
+                            <option value="">--Please choose--</option>
+                            <option value="us">United States</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="ca">Canada</option>
+                            <option value="au">Australia</option>
+                        </select>
+                        <br><br>
+
+                        <label for="cars">Select Multiple Cars:</label>
+                        <select id="cars" name="cars" multiple size="4">
+                            <option value="volvo">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="opel">Opel</option>
+                            <option value="audi">Audi</option>
+                        </select>
+                        <br><br>
+
+                        <label for="browser">Choose Browser:</label>
+                        <input list="browsers" id="browser" name="browser">
+                        <datalist id="browsers">
+                            <option value="Chrome">
+                            <option value="Firefox">
+                            <option value="Safari">
+                            <option value="Edge">
+                            <option value="Opera">
+                        </datalist>
+                        <br><br>
+
+                        <label for="message">Message:</label><br>
+                        <textarea id="message" name="message" rows="4" cols="50"
+                            placeholder="Enter your message here..."></textarea>
+                        <br><br>
+
+                        <label for="progress">Upload Progress:</label>
+                        <progress id="progress" value="70" max="100">70%</progress>
+                        <br><br>
+
+                        <label for="disk">Disk Usage:</label>
+                        <meter id="disk" value="0.6" min="0" max="1">60%</meter>
+                        <br><br>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Actions</legend>
+                        <button type="submit">Submit Button</button>
+                        <button type="reset">Reset Button</button>
+                        <button type="button">Regular Button</button>
+                        <br><br>
+                        <input type="submit" value="Submit Input">
+                        <input type="reset" value="Reset Input">
+                        <input type="button" value="Button Input">
+                        <input type="image"
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='30'%3E%3Crect fill='%23999' width='50' height='30'/%3E%3Ctext x='25' y='20' text-anchor='middle' fill='white'%3EClick%3C/text%3E%3C/svg%3E"
+                            alt="Image Button">
+                    </fieldset>
+                </form>
+            </section>
+
+            <section>
+                <h3>Output Element</h3>
+                <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
+                    <input type="range" id="a" name="a" value="50"> +
+                    <input type="number" id="b" name="b" value="50"> =
+                    <output name="result" for="a b">100</output>
+                </form>
+            </section>
+        </article>
+
+        <article id="media">
+            <h2>Media Elements</h2>
+
+            <section>
+                <h3>Images</h3>
+                <figure>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%234A90E2' width='400' height='200'/%3E%3Ctext x='200' y='100' text-anchor='middle' fill='white' font-size='24'%3ESample Image%3C/text%3E%3C/svg%3E"
+                        alt="Sample image description" width="400" height="200">
+                    <figcaption>Figure caption describing the image above</figcaption>
+                </figure>
+
+                <h4>Image Map</h4>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%23E74C3C' width='200' height='200'/%3E%3Crect fill='%232ECC71' x='200' width='200' height='200'/%3E%3C/svg%3E"
+                    alt="Image map example" usemap="#imagemap">
+                <map name="imagemap">
+                    <area shape="rect" coords="0,0,200,200" href="#" alt="Red area">
+                    <area shape="rect" coords="200,0,400,200" href="#" alt="Green area">
+                </map>
+
+                <h4>Picture Element (Responsive Images)</h4>
+                <picture>
+                    <source media="(min-width: 800px)"
+                        srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Crect fill='%239B59B6' width='800' height='200'/%3E%3Ctext x='400' y='100' text-anchor='middle' fill='white' font-size='24'%3ELarge Screen%3C/text%3E%3C/svg%3E">
+                    <source media="(min-width: 400px)"
+                        srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%23E67E22' width='400' height='200'/%3E%3Ctext x='200' y='100' text-anchor='middle' fill='white' font-size='24'%3EMedium Screen%3C/text%3E%3C/svg%3E">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%231ABC9C' width='200' height='200'/%3E%3Ctext x='100' y='100' text-anchor='middle' fill='white' font-size='18'%3ESmall%3C/text%3E%3C/svg%3E"
+                        alt="Responsive image">
+                </picture>
+            </section>
+
+            <section>
+                <h3>Audio</h3>
+                <audio controls>
+                    <source src="audio.mp3" type="audio/mpeg">
+                    <source src="audio.ogg" type="audio/ogg">
+                    Your browser does not support the audio element.
+                </audio>
+                <p>Audio element with controls and multiple source formats</p>
+            </section>
+
+            <section>
+                <h3>Video</h3>
+                <video width="400" height="300" controls poster="poster.jpg">
+                    <source src="video.mp4" type="video/mp4">
+                    <source src="video.webm" type="video/webm">
+                    <track kind="subtitles" src="subtitles_en.vtt" srclang="en" label="English">
+                    <track kind="captions" src="captions_en.vtt" srclang="en" label="English Captions">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Video element with controls, poster, and subtitle tracks</p>
+            </section>
+
+            <section>
+                <h3>Embedded Content</h3>
+                <iframe src="https://www.example.com" width="400" height="300" title="Iframe Example">
+                    Your browser does not support iframes.
+                </iframe>
+                <p>Iframe for embedding external content</p>
+
+                <embed type="video/mp4" src="video.mp4" width="400" height="300">
+                <p>Embed tag for external applications</p>
+
+                <object data="document.pdf" type="application/pdf" width="400" height="300">
+                    <p>Alternative content if object cannot be displayed</p>
+                </object>
+                <p>Object tag for external resources</p>
+            </section>
+
+            <section>
+                <h3>Canvas and SVG</h3>
+                <canvas id="myCanvas" width="400" height="200">
+                    Your browser does not support the canvas element.
+                </canvas>
+                <p>Canvas element for drawing graphics via JavaScript</p>
+
+                <svg width="400" height="200">
+                    <rect width="400" height="200" fill="#3498DB" />
+                    <circle cx="200" cy="100" r="50" fill="#ECF0F1" />
+                    <text x="200" y="110" text-anchor="middle" fill="#2C3E50" font-size="20">SVG Example</text>
+                </svg>
+                <p>SVG element for vector graphics</p>
+            </section>
+        </article>
+
+        <article id="tables">
+            <h2>Table Elements</h2>
+
+            <section>
+                <h3>Basic Table Structure</h3>
+                <table border="1">
+                    <caption>Table Caption - Describes the table content</caption>
+                    <thead>
+                        <tr>
+                            <th>Header 1</th>
+                            <th>Header 2</th>
+                            <th>Header 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Row 1, Cell 1</td>
+                            <td>Row 1, Cell 2</td>
+                            <td>Row 1, Cell 3</td>
+                        </tr>
+                        <tr>
+                            <td>Row 2, Cell 1</td>
+                            <td>Row 2, Cell 2</td>
+                            <td>Row 2, Cell 3</td>
+                        </tr>
+                        <tr>
+                            <td>Row 3, Cell 1</td>
+                            <td>Row 3, Cell 2</td>
+                            <td>Row 3, Cell 3</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Table Footer - Summary or totals</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </section>
+
+            <section>
+                <h3>Advanced Table Features</h3>
+                <table border="1">
+                    <colgroup>
+                        <col span="1">
+                        <col span="2">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Product</th>
+                            <th colspan="2">Sales</th>
+                        </tr>
+                        <tr>
+                            <th>Q1</th>
+                            <th>Q2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Widget A</th>
+                            <td>100</td>
+                            <td>150</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Widget B</th>
+                            <td>200</td>
+                            <td>175</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Table with colspan, rowspan, colgroup, and scope attributes</p>
+            </section>
+        </article>
+
+        <article>
+            <h2>Interactive Elements</h2>
+
+            <section>
+                <h3>Details and Summary</h3>
+                <details>
+                    <summary>Click to expand/collapse</summary>
+                    <p>This content is hidden by default and can be toggled by clicking the summary.</p>
+                    <p>The details element is great for FAQs, additional information, or collapsible sections.</p>
+                </details>
+
+                <details open>
+                    <summary>This one is open by default</summary>
+                    <p>Notice the 'open' attribute makes this visible initially.</p>
+                </details>
+            </section>
+
+            <section>
+                <h3>Dialog</h3>
+                <dialog id="myDialog">
+                    <p>This is a dialog box. It can be opened and closed programmatically.</p>
+                    <button onclick="document.getElementById('myDialog').close()">Close Dialog</button>
+                </dialog>
+                <button onclick="document.getElementById('myDialog').showModal()">Open Dialog</button>
+            </section>
+        </article>
+
+        <article>
+            <h2>Semantic Text-Level Elements</h2>
+
+            <section>
+                <h3>Special Purpose Tags</h3>
+                <p><bdi dir="ltr">User input: <bdi>مرحبا</bdi></bdi> - Bidirectional Isolate</p>
+                <p><bdo dir="rtl">This text will be right-to-left</bdo> - Bidirectional Override</p>
+                <p>Chemical formula: H<sub>2</sub>O uses subscript</p>
+                <p>Mathematical expression: x<sup>2</sup> + y<sup>2</sup> = z<sup>2</sup> uses superscript</p>
+                <p>Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy</p>
+                <p><samp>Error: File not found</samp> - Sample program output</p>
+                <p>The <var>x</var> variable represents an unknown value</p>
+                <p><wbr> tag suggests line break opportunities in long words like: super<wbr>cali<wbr>fragi<wbr>listic<wbr>expi<wbr>ali<wbr>docious
+                </p>
+            </section>
+        </article>
+
+        <article>
+            <h2>Scripting and Metadata</h2>
+
+            <section>
+                <h3>Script Elements</h3>
+                <p>Script tags contain JavaScript code (in head or body)</p>
+                <noscript>
+                    <p>This message appears when JavaScript is disabled in the browser.</p>
+                </noscript>
+
+                <p>Template element - stores HTML that won't render until cloned by JavaScript:</p>
+                <template id="myTemplate">
+                    <div>
+                        <h4>Template Content</h4>
+                        <p>This is inside a template and won't display until used by JavaScript</p>
+                    </div>
+                </template>
+            </section>
+
+            <section>
+                <h3>Slot (Web Components)</h3>
+                <p>Slot element is used with Web Components for content projection</p>
+            </section>
+        </article>
+
+        <article>
+            <h2>Link and Meta Information</h2>
+
+            <section>
+                <h3>Base Element</h3>
+                <p>The base tag (in head) specifies base URL for all relative URLs</p>
+                <p>Example: &lt;base href="https://example.com/" target="_blank"&gt;</p>
+            </section>
+
+            <section>
+                <h3>Links</h3>
+                <p><a href="https://example.com">Standard hyperlink</a></p>
+                <p><a href="mailto:email@example.com">Email link</a></p>
+                <p><a href="tel:+1234567890">Phone link</a></p>
+                <p><a href="#top">Internal anchor link</a></p>
+                <p><a href="document.pdf" download>Download link</a></p>
+                <p><a href="page.html" rel="nofollow">Link with rel attribute</a></p>
+            </section>
+        </article>
+
+        <article>
+            <h2>Grouping and Container Elements</h2>
+
+            <section>
+                <h3>Generic Containers</h3>
+                <div>
+                    <p>DIV - Block-level generic container for grouping elements</p>
+                    <p>Used for layout and styling purposes</p>
+                </div>
+
+                <p>This is a paragraph with a <span>SPAN - inline generic container</span> inside it.</p>
+
+                <p>
+                <address>
+                    Contact Information<br>
+                    123 Main Street<br>
+                    City, State 12345<br>
+                    <a href="mailto:contact@example.com">contact@example.com</a>
+                </address>
+                </p>
+            </section>
+        </article>
+
+        <article>
+            <h2>Deprecated/Rarely Used Tags (For Reference)</h2>
+
+            <section>
+                <h3>Legacy Elements</h3>
+                <p>The following are older tags, some deprecated but still recognized:</p>
+                <ul>
+                    <li><code>&lt;center&gt;</code> - Centered text (deprecated, use CSS)</li>
+                    <li><code>&lt;font&gt;</code> - Font styling (deprecated, use CSS)</li>
+                    <li><code>&lt;strike&gt;</code> - Strikethrough (use &lt;s&gt; or &lt;del&gt;)</li>
+                    <li><code>&lt;big&gt;</code> - Bigger text (deprecated, use CSS)</li>
+                    <li><code>&lt;tt&gt;</code> - Teletype text (use &lt;code&gt; or CSS)</li>
+                    <li><code>&lt;frame&gt;</code>, <code>&lt;frameset&gt;</code> - Frames (obsolete)</li>
+                    <li><code>&lt;acronym&gt;</code> - Use &lt;abbr&gt; instead</li>
+                    <li><code>&lt;applet&gt;</code> - Java applets (obsolete)</li>
+                    <li><code>&lt;basefont&gt;</code> - Base font (deprecated)</li>
+                    <li><code>&lt;dir&gt;</code> - Directory list (use &lt;ul&gt;)</li>
+                    <li><code>&lt;marquee&gt;</code> - Scrolling text (non-standard)</li>
+                    <li><code>&lt;blink&gt;</code> - Blinking text (obsolete)</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <aside>
+        <h2>Additional Notes</h2>
+        <p>This page demonstrates HTML tags in their raw, unstyled form.</p>
+        <p>Later, we can add CSS to style these elements beautifully!</p>
+    </aside>
+
+    <footer>
+        <hr>
+        <p>HTML Tags Reference Page</p>
+        <p>Created: November 2025</p>
+        <p>Total tags demonstrated: 100+</p>
+        <small>This page contains most HTML5 tags for educational purposes</small>
+    </footer>
+</body>
+
+</html>

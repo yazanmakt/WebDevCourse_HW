@@ -1,0 +1,52 @@
+
+/* Modern Style */
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+h2 {
+    color: #3498db;
+    margin-top: 20px;
+}
+p, li, td, th {
+    font-size: 16px;
+}
+ul, ol {
+    margin-left: 25px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+th {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+}
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+form input, form select, form textarea, form button {
+    margin: 8px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+form button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+form button:hover {
+    background-color: #2980b9;
+}
