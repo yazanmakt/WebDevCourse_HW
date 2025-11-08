@@ -35,11 +35,18 @@
         </tr>
         <tr>
             <td colspan="2" align="center">
-                <input type="submit" value="Send Message">
+                <button id="sendBtn" type="button">Send Message</button>
             </td>
         </tr>
 
     </table>
+    <script>
+        function onSendClick() {
+            alert("test , message is not sent");
+            console.debug("send button clicked");
+        }
+        document.getElementById("sendBtn").addEventListener("click", onSendClick);
+    </script>
 </body>
 
 </html>
