@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        form {
+            max-width: 420px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #b00020;
+            margin-top: 10px;
+        }
+
+        .ok {
+            color: #0a7a0a;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Register</h1>
+
+    <form id="registerForm">
+        <label>Username<input type="text" id="username" required /></label>
+
+        <label>Password<input type="password" id="password" required /> </label>
+
+        <label>Confirm Password<input type="password" id="confirmPassword" required /></label>
+
+        <label>Email <input type="email" id="email" required /> </label>
+
+        <label>First Name <input type="text" id="firstName" required /> </label>
+
+        <label>Last Name <input type="text" id="lastName" required /> </label>
+
+        <label>Image URL <input type="url" id="imageUrl" placeholder="https://..." required /> </label>
+
+        <button type="submit">Create Account</button>
+
+        <div id="msg" class="error"></div>
+    </form>
+
+    <p style="margin-top: 16px;">
+        Already Have an Account ? <a href="login.html">Login</a>
+    </p>
+
+    <script>
+        function getUsers() {
+            const raw = localStorage.getItem("users");
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+        function passwordIsValid(pw) {
+            const hasLetter = /[A-Za-z]/.test(pw);
+            const hasDigit = /[0-9]/.test(pw);
+            return pw.length >= 6 && hasLetter && hasDigit;
+        }
+
+        document.getElementById("registerForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const msgEl = document.getElementById("msg");
+            msgEl.className = "error";
+            msgEl.textContent = "";
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const email = document.getElementById("email").value.trim();
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const imageUrl = document.getElementById("imageUrl").value.trim();
+
+            //required fields
+            if (!username || !password || !confirmPassword || !email || !firstName || !lastName || !imageUrl) {
+                msgEl.textContent = "All fields are required";
+                return;
+            }
+
+            //username exists in local storage users
+            const users = getUsers();
+            const exists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+            if (exists) {
+                msgEl.textContent = "Username already exists , please try another.";
+                return;
+            }
+
+            //password rules 
+            if (!passwordIsValid(password)) {
+                msgEl.textContent = "Password does not match rules";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                msgEl.textContent = "Passwords do not match.";
+                return;
+            }
+
+            //save the new user
+            users.push({ username, password, email, firstName, lastName, imageUrl });
+
+            saveUsers(users);
+
+            msgEl.className = "ok";
+            msgEl.textContent = "Registration successful , going to login";
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 800);
+        });
+    </script>
+</body>
+
+</html>
