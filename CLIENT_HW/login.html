@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<body>
+
+    <h1>Login</h1>
+
+    <form id="loginForm">
+        <label>
+            Username
+            <input type="text" id="username" required>
+        </label>
+
+        <label>
+            Password
+            <input type="password" id="password" required>
+        </label>
+
+        <button type="submit">Login</button>
+
+        <div id="msg"></div>
+    </form>
+
+    <p>
+        Dont have an account ? <a href="register.html">Register</a>
+    </p>
+
+    <script>
+        function getUsers() {
+            const raw = localStorage.getItem("users");
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function setCurrentUserSession(user) {
+            //storing the logged user in session storage
+            const safeUser = {
+                username: user.username,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                imageUrl: user.imageUrl
+            };
+            sessionStorage.setItem("currentUser", JSON.stringify(safeUser));
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const msgEl = document.getElementById("msg");
+            msgEl.textContent = "";
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            if (!username || !password) {
+                msgEl.textContent = "Username and Password are required";
+                return;
+            }
+
+            const users = getUsers();
+
+            //see if username and password match with registerd user
+            const user = users.find(u =>
+                u.username.toLowerCase() === username.toLowerCase() && u.password === password
+            );
+
+            if (!user) {
+                msgEl.textContent = "Invalid username or password";
+                return;
+            }
+
+            //the username and password are registerd
+            setCurrentUserSession(user);
+            window.location.href = "search.html";
+        });
+    </script>
+</body>
+
+</html>
