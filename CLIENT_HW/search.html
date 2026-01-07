@@ -8,18 +8,14 @@
 
 <body>
 
-    <!--Header with user name and image-->
     <header>
-        <div id="welcome">
-            <h1>Welcome</h1>
-            <img id="userImage" alt="User image" />
-            <span id="welcomeText"></span>
-        </div>
+        <h1>Welcome</h1>
+        <img id="userImage" alt="User image" />
+        <span id="welcomeText"></span>
     </header>
 
-    <hr>
+    <hr />
 
-    <!--Search section-->
     <main>
         <h1>Search</h1>
 
@@ -28,12 +24,12 @@
         <form id="searchForm">
             <label>
                 Search:
-                <input type="text" id="query" required>
+                <input type="text" id="query" required />
             </label>
 
             <label>
                 Max results:
-                <input type="number" id="maxResults" min="1" max="50" value="10" required>
+                <input type="number" id="maxResults" min="1" max="50" value="10" required />
             </label>
 
             <button type="submit">Search</button>
@@ -44,54 +40,27 @@
     </main>
 
     <script>
-        // ========= CONFIG =========
+        // ========= AUTH =========
+        async function requireLogin() {
+            const res = await fetch("/api/me");
+            const data = await res.json();
+            if (!data.loggedIn) {
+                window.location.href = "login.html";
+                return null;
+            }
+            return data.user;
+        }
+
+        // ========= YOUTUBE =========
         const YOUTUBE_API_KEY = "AIzaSyADMUDwbzf4YePYVEQ6HzpTDU2iAucIjIY";
 
-        // ========= AUTH / USER =========
-        function getCurrentUser() {
-            const raw = sessionStorage.getItem("currentUser");
-            return raw ? JSON.parse(raw) : null;
-        }
-
-        const user = getCurrentUser();
-        if (!user) {
-            window.location.href = "login.html";
-        } else {
-            document.getElementById("welcomeText").textContent = `${user.firstName} ${user.lastName}`;
-            const img = document.getElementById("userImage");
-            img.src = user.imageUrl;
-            img.width = 50;
-            img.height = 50;
-        }
-
-        // ========= PLAYLISTS (LOCAL STORAGE) =========
-        function getPlaylists() {
-            const raw = localStorage.getItem("playlists");
-            return raw ? JSON.parse(raw) : [];
-        }
-
-        function savePlaylists(playlists) {
-            localStorage.setItem("playlists", JSON.stringify(playlists));
-        }
-
-        function getUserPlaylists(username) {
-            return getPlaylists().filter(p => p.owner.toLowerCase() === username.toLowerCase());
-        }
-
-        function videoExistsInPlaylist(playlist, videoId) {
-            return playlist.items.some(it => it.videoId === videoId);
-        }
-
-        // ========= QUERYSTRING =========
         const form = document.getElementById("searchForm");
         const queryInput = document.getElementById("query");
         const maxInput = document.getElementById("maxResults");
         const statusEl = document.getElementById("status");
         const resultsEl = document.getElementById("results");
 
-        function setStatus(text) {
-            statusEl.textContent = text;
-        }
+        function setStatus(t) { statusEl.textContent = t; }
 
         function writeParamsToUrl(q, max) {
             const url = new URL(window.location.href);
@@ -107,7 +76,6 @@
             return { q, max: Number.isFinite(max) ? max : 10 };
         }
 
-        // ========= SMALL HELPERS =========
         function decodeHtmlEntities(str) {
             const txt = document.createElement("textarea");
             txt.innerHTML = str;
@@ -129,7 +97,6 @@
             return n.toLocaleString();
         }
 
-        // ISO 8601 duration like "PT4M13S" -> "4:13"
         function formatDuration(iso) {
             if (!iso) return "";
             const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
@@ -137,193 +104,135 @@
             const h = Number(m[1] || 0);
             const min = Number(m[2] || 0);
             const s = Number(m[3] || 0);
-
             const mm = h > 0 ? String(min).padStart(2, "0") : String(min);
             const ss = String(s).padStart(2, "0");
             return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
         }
 
-        function shortenWithTooltip(text, maxLen = 60) {
+        function shortenWithTooltip(text, maxLen = 70) {
             if (!text) return "";
             if (text.length <= maxLen) return escapeHtml(text);
             const short = text.slice(0, maxLen - 3) + "...";
             return `<span title="${escapeHtml(text)}">${escapeHtml(short)}</span>`;
         }
 
-        // ========= YOUTUBE SEARCH =========
-        async function doSearch(q, max) {
-            setStatus("Searching...");
-
-            try {
-                // 1) Search API
-                const searchUrl =
-                    `https://www.googleapis.com/youtube/v3/search` +
-                    `?part=snippet` +
-                    `&type=video` +
-                    `&q=${encodeURIComponent(q)}` +
-                    `&maxResults=${encodeURIComponent(max)}` +
-                    `&key=${encodeURIComponent(YOUTUBE_API_KEY)}`;
-
-                const searchRes = await fetch(searchUrl);
-                const searchData = await searchRes.json();
-
-                if (!searchRes.ok) {
-                    setStatus("Error from YouTube API (search). Check console.");
-                    console.log("YouTube search error:", searchData);
-                    resultsEl.textContent = "YouTube API error (search).";
-                    return;
-                }
-
-                const items = searchData.items || [];
-                const videoIds = items.map(it => it.id && it.id.videoId).filter(Boolean);
-
-                if (videoIds.length === 0) {
-                    resultsEl.textContent = "No results found.";
-                    setStatus("Done.");
-                    return;
-                }
-
-                // 2) Videos API (duration + views)
-                const videosUrl =
-                    `https://www.googleapis.com/youtube/v3/videos` +
-                    `?part=contentDetails,statistics` +
-                    `&id=${encodeURIComponent(videoIds.join(","))}` +
-                    `&key=${encodeURIComponent(YOUTUBE_API_KEY)}`;
-
-                const videosRes = await fetch(videosUrl);
-                const videosData = await videosRes.json();
-
-                if (!videosRes.ok) {
-                    setStatus("Error from YouTube API (videos). Check console.");
-                    console.log("YouTube videos error:", videosData);
-                    resultsEl.textContent = "YouTube API error (videos).";
-                    return;
-                }
-
-                // Build lookup by id
-                const byId = {};
-                for (const vid of (videosData.items || [])) {
-                    byId[vid.id] = vid;
-                }
-
-                // 3) Merge for rendering
-                const merged = items.map(it => {
-                    const id = it.id.videoId;
-                    const v = byId[id] || {};
-                    return {
-                        videoId: id,
-                        title: decodeHtmlEntities(it.snippet.title || ""),
-                        channel: it.snippet.channelTitle || "",
-                        thumb: it.snippet.thumbnails?.medium?.url ||
-                            it.snippet.thumbnails?.default?.url || "",
-                        durationISO: v.contentDetails?.duration || "",
-                        views: v.statistics?.viewCount || ""
-                    };
-                });
-
-                renderResultsTable(merged);
-                setStatus("Done.");
-            } catch (err) {
-                console.log(err);
-                setStatus("Error. Check console.");
-                resultsEl.textContent = "Unexpected error.";
-            }
+        // ========= PLAYLIST API (SERVER) =========
+        async function getPlaylists() {
+            const res = await fetch("/api/playlists");
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || `Failed to load playlists (${res.status})`);
+            return data.playlists || [];
         }
 
-        // ========= ADD TO PLAYLIST (PROMPT FLOW) =========
-        function handleAddClick(video, allVideosForRefresh) {
-            const user = getCurrentUser();
-            if (!user) {
-                alert("Please login again.");
-                window.location.href = "login.html";
-                return;
-            }
+        async function createPlaylist(name) {
+            const res = await fetch("/api/playlists", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || `Failed to create playlist (${res.status})`);
+            return data.playlist;
+        }
 
-            const myLists = getUserPlaylists(user.username);
+        async function addToPlaylist(playlistId, video) {
+            const res = await fetch(`/api/playlists/${encodeURIComponent(playlistId)}/items`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(video)
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || `Failed to add video (${res.status})`);
+            return true;
+        }
 
-            let listText = myLists.map((p, i) => `${i + 1}) ${p.name}`).join("\n");
+        async function handleAdd(video) {
+            const lists = await getPlaylists();
+
+            let listText = lists.map((p, i) => `${i + 1}) ${p.name}`).join("\n");
             if (!listText) listText = "(no playlists yet)";
 
             const choice = prompt(
                 `Add to playlist:\n\nExisting playlists:\n${listText}\n\n` +
-                `Type a number to choose an existing playlist,\n` +
-                `OR type NEW to create a new playlist:`
+                `Type a number OR type NEW to create a new playlist:`
             );
-
             if (!choice) return;
 
-            const all = getPlaylists();
+            let target = null;
 
             if (choice.trim().toUpperCase() === "NEW") {
-                const newName = prompt("New playlist name:");
-                if (!newName) return;
-
-                const newPlaylist = {
-                    id: "pl_" + Date.now(),
-                    owner: user.username,
-                    name: newName.trim(),
-                    items: []
-                };
-
-                newPlaylist.items.push({
-                    videoId: video.videoId,
-                    title: video.title,
-                    channel: video.channel,
-                    thumb: video.thumb,
-                    duration: video.durationISO,
-                    views: video.views
-                });
-
-                all.push(newPlaylist);
-                savePlaylists(all);
-
-                alert(`Added to new playlist: ${newPlaylist.name}`);
-                renderResultsTable(allVideosForRefresh); // refresh buttons
-                return;
+                const name = prompt("New playlist name:");
+                if (!name) return;
+                target = await createPlaylist(name.trim());
+            } else {
+                const idx = Number(choice);
+                if (!Number.isFinite(idx) || idx < 1 || idx > lists.length) {
+                    alert("Invalid choice.");
+                    return;
+                }
+                target = lists[idx - 1];
             }
 
-            const idx = Number(choice);
-            if (!Number.isFinite(idx) || idx < 1 || idx > myLists.length) {
-                alert("Invalid choice.");
-                return;
-            }
-
-            const selected = myLists[idx - 1];
-            const pl = all.find(p => p.id === selected.id);
-
-            if (!pl) {
-                alert("Playlist not found.");
-                return;
-            }
-
-            if (videoExistsInPlaylist(pl, video.videoId)) {
-                alert("This video is already in that playlist.");
-                return;
-            }
-
-            pl.items.push({
-                videoId: video.videoId,
-                title: video.title,
-                channel: video.channel,
-                thumb: video.thumb,
-                duration: video.durationISO,
-                views: video.views
-            });
-
-            savePlaylists(all);
-            alert(`Added to playlist: ${pl.name}`);
-
-            renderResultsTable(allVideosForRefresh); // refresh buttons
+            await addToPlaylist(target.id, video);
+            alert(`Added to playlist: ${target.name}`);
         }
 
-        // ========= RENDER TABLE =========
-        function renderResultsTable(videos) {
+        // ========= SEARCH =========
+        async function doSearch(q, max) {
+            setStatus("Searching...");
             resultsEl.innerHTML = "";
 
-            if (!videos || videos.length === 0) {
-                resultsEl.textContent = "No results found.";
+            const searchUrl =
+                `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video` +
+                `&q=${encodeURIComponent(q)}&maxResults=${max}&key=${YOUTUBE_API_KEY}`;
+
+            const searchRes = await fetch(searchUrl);
+            const searchData = await searchRes.json();
+
+            if (!searchRes.ok) {
+                resultsEl.innerHTML = `<pre style="border:1px solid red;padding:10px;">${escapeHtml(JSON.stringify(searchData, null, 2))}</pre>`;
+                setStatus("Error.");
                 return;
             }
+
+            const items = searchData.items || [];
+            const videoIds = items.map(it => it.id?.videoId).filter(Boolean);
+
+            if (!videoIds.length) {
+                resultsEl.textContent = "No results found.";
+                setStatus("Done.");
+                return;
+            }
+
+            const videosUrl =
+                `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics` +
+                `&id=${encodeURIComponent(videoIds.join(","))}&key=${YOUTUBE_API_KEY}`;
+
+            const videosRes = await fetch(videosUrl);
+            const videosData = await videosRes.json();
+
+            const byId = {};
+            for (const v of (videosData.items || [])) byId[v.id] = v;
+
+            const merged = items.map(it => {
+                const id = it.id?.videoId;
+                const v = byId[id] || {};
+                return {
+                    videoId: id,
+                    title: decodeHtmlEntities(it.snippet?.title || ""),
+                    channel: it.snippet?.channelTitle || "",
+                    thumb: it.snippet?.thumbnails?.medium?.url || it.snippet?.thumbnails?.default?.url || "",
+                    durationISO: v.contentDetails?.duration || "",
+                    views: v.statistics?.viewCount || ""
+                };
+            });
+
+            renderResultsTable(merged);
+            setStatus("Done.");
+        }
+
+        function renderResultsTable(videos) {
+            resultsEl.innerHTML = "";
 
             const table = document.createElement("table");
             table.border = "1";
@@ -332,88 +241,90 @@
             table.style.width = "100%";
 
             table.innerHTML = `
-        <thead>
-          <tr>
-            <th>Thumbnail</th>
-            <th>Duration</th>
-            <th>Views</th>
-            <th>Channel</th>
-            <th>Favorites</th>
-          </tr>
-        </thead>
-        <tbody id="tblBody"></tbody>
-      `;
+      <thead>
+        <tr>
+          <th>Thumbnail</th>
+          <th>Duration</th>
+          <th>Views</th>
+          <th>Channel</th>
+          <th>Favorites</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
 
-            resultsEl.appendChild(table);
-            const tbody = table.querySelector("#tblBody");
-
-            const user = getCurrentUser();
-            const myLists = user ? getUserPlaylists(user.username) : [];
+            const tbody = table.querySelector("tbody");
 
             for (const v of videos) {
-                const alreadySomewhere = myLists.some(pl => videoExistsInPlaylist(pl, v.videoId));
-
                 const tr1 = document.createElement("tr");
                 tr1.innerHTML = `
-          <td rowspan="2">
-            <a target="_blank" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}">
-              <img src="${escapeHtml(v.thumb)}" width="160" alt="thumb" style="cursor:pointer">
-            </a>
-          </td>
-          <td>${escapeHtml(formatDuration(v.durationISO))}</td>
-          <td>${escapeHtml(formatViews(v.views))}</td>
-          <td>${escapeHtml(v.channel)}</td>
-          <td>
-            <button ${alreadySomewhere ? "disabled" : ""}>
-              ${alreadySomewhere ? "✓ Added" : "Add"}
-            </button>
-          </td>
-        `;
+        <td rowspan="2">
+          <a target="_blank" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}">
+            <img src="${escapeHtml(v.thumb)}" width="160" alt="thumb">
+          </a>
+        </td>
+        <td>${escapeHtml(formatDuration(v.durationISO))}</td>
+        <td>${escapeHtml(formatViews(v.views))}</td>
+        <td>${escapeHtml(v.channel)}</td>
+        <td><button class="addBtn">Add</button></td>
+      `;
 
                 const tr2 = document.createElement("tr");
                 tr2.innerHTML = `
-          <td colspan="4">
-            <a target="_blank" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}"
-               style="text-decoration:none; color:inherit;">
-              ${shortenWithTooltip(v.title, 60)}
-            </a>
-          </td>
-        `;
+        <td colspan="4">
+          <a target="_blank" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}"
+             style="text-decoration:none;color:inherit;">
+            ${shortenWithTooltip(v.title, 70)}
+          </a>
+        </td>
+      `;
 
                 tbody.appendChild(tr1);
                 tbody.appendChild(tr2);
 
-                const btn = tr1.querySelector("button");
-                if (!alreadySomewhere) {
-                    btn.addEventListener("click", () => handleAddClick(v, videos));
-                }
+                tr1.querySelector(".addBtn").addEventListener("click", async () => {
+                    try {
+                        await handleAdd(v);
+                    } catch (e) {
+                        console.error(e);
+                        alert("Add failed: " + (e?.message || e));
+                    }
+                });
             }
+
+            resultsEl.appendChild(table);
         }
 
-        // ========= FORM SUBMIT =========
+        // ========= RUN =========
+        (async () => {
+            const user = await requireLogin();
+            if (!user) return;
+
+            document.getElementById("welcomeText").textContent = `${user.firstName} ${user.lastName}`;
+            const img = document.getElementById("userImage");
+            img.src = user.imageUrl;
+            img.width = 50;
+            img.height = 50;
+
+            const params = readParamsFromUrl();
+            if (params.q) {
+                queryInput.value = params.q;
+                maxInput.value = String(params.max);
+                doSearch(params.q, params.max);
+            }
+        })();
+
         form.addEventListener("submit", (e) => {
             e.preventDefault();
-
             const q = queryInput.value.trim();
             const max = parseInt(maxInput.value, 10);
-
-            if (!q) {
-                setStatus("Please enter a search term");
-                return;
-            }
-
+            if (!q) return setStatus("Please enter a search term");
             writeParamsToUrl(q, max);
             doSearch(q, max);
         });
-
-        // ========= AUTO SEARCH FROM URL =========
-        const params = readParamsFromUrl();
-        if (params.q) {
-            queryInput.value = params.q;
-            maxInput.value = String(params.max);
-            doSearch(params.q, params.max);
-        }
     </script>
+
+
 </body>
 
 </html>

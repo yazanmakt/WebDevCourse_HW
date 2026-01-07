@@ -1,0 +1,18 @@
+[
+  {
+    "username": "yan",
+    "password": "yazan24",
+    "email": "yazanmk24@gmail.com",
+    "firstName": "yan",
+    "lastName": "mak",
+    "imageUrl": "https://example.com/a.jpg"
+  },
+  {
+    "username": "hasan",
+    "password": "hasan30",
+    "email": "yazanmk24@gmail.com",
+    "firstName": "han",
+    "lastName": "mak",
+    "imageUrl": "https://example.com/a.jpg"
+  }
+]

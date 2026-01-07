@@ -4,79 +4,104 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        form {
+            max-width: 420px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #b00020;
+            margin-top: 10px;
+        }
+
+        .ok {
+            color: #0a7a0a;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-
     <h1>Login</h1>
 
     <form id="loginForm">
-        <label>
-            Username
-            <input type="text" id="username" required>
-        </label>
-
-        <label>
-            Password
-            <input type="password" id="password" required>
-        </label>
+        <label>Username<input type="text" id="username" required /></label>
+        <label>Password<input type="password" id="password" required /></label>
 
         <button type="submit">Login</button>
 
-        <div id="msg"></div>
+        <div id="msg" class="error"></div>
     </form>
 
-    <p>
-        Dont have an account ? <a href="register.html">Register</a>
+    <p style="margin-top: 16px;">
+        Don’t have an account? <a href="register.html">Register</a>
     </p>
 
     <script>
-        function getUsers() {
-            const raw = localStorage.getItem("users");
-            return raw ? JSON.parse(raw) : [];
-        }
-
-        function setCurrentUserSession(user) {
-            //storing the logged user in session storage
-            const safeUser = {
-                username: user.username,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                imageUrl: user.imageUrl
-            };
-            sessionStorage.setItem("currentUser", JSON.stringify(safeUser));
-        }
-
-        document.getElementById("loginForm").addEventListener("submit", function (e) {
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
             const msgEl = document.getElementById("msg");
+            msgEl.className = "error";
             msgEl.textContent = "";
 
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
 
             if (!username || !password) {
-                msgEl.textContent = "Username and Password are required";
+                msgEl.textContent = "Username and password are required.";
                 return;
             }
 
-            const users = getUsers();
+            try {
+                const res = await fetch("http://localhost:3000/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password }),
+                });
 
-            //see if username and password match with registerd user
-            const user = users.find(u =>
-                u.username.toLowerCase() === username.toLowerCase() && u.password === password
-            );
+                const data = await res.json();
 
-            if (!user) {
-                msgEl.textContent = "Invalid username or password";
-                return;
+                if (!res.ok) {
+                    msgEl.textContent = data.error || "Login failed.";
+                    return;
+                }
+
+                // Optional: store user for UI (server session is the real auth)
+                sessionStorage.setItem("currentUser", JSON.stringify(data.user));
+
+                msgEl.className = "ok";
+                msgEl.textContent = "Login successful. Redirecting...";
+
+                setTimeout(() => {
+                    window.location.href = "search.html";
+                }, 400);
+
+            } catch (err) {
+                msgEl.textContent = "Server is not running or network error.";
             }
-
-            //the username and password are registerd
-            setCurrentUserSession(user);
-            window.location.href = "search.html";
         });
     </script>
 </body>
