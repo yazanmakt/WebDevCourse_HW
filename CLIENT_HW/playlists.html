@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playlists</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .wrap {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 280px;
+            border-right: 1px solid #ddd;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .side-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .side-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 10px;
+            cursor: pointer;
+            border: 1px solid #444;
+            background: #fff;
+        }
+
+        .btn.primary {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        .btn.danger {
+            background: #b00020;
+            color: #fff;
+            border-color: #b00020;
+        }
+
+        .playlist-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .playlist-list li {
+            margin: 6px 0;
+        }
+
+        .pl-link {
+            display: block;
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #111;
+        }
+
+        .pl-link.active {
+            border-color: #111;
+            background: #f4f4f4;
+            font-weight: 700;
+        }
+
+        /* Main */
+        main {
+            flex: 1;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .userbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .userbox img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
+        .muted {
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin: 14px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input,
+        select {
+            padding: 8px;
+        }
+
+        .msg {
+            padding: 12px;
+            border: 1px dashed #888;
+            background: #fafafa;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f3f3f3;
+        }
+
+        .thumb {
+            width: 160px;
+            border-radius: 6px;
+        }
+
+        .title {
+            font-weight: 700;
+        }
+
+        .small {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        /* Modal */
+        dialog {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 14px;
+            width: 340px;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .modal-row {
+            margin: 10px 0;
+        }
+
+        .modal-row label {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <!-- Sidebar -->
+        <aside>
+            <div class="side-title">My Favorites</div>
+
+            <div class="side-actions">
+                <button id="newPlaylistBtn" class="btn primary">+ New Playlist</button>
+                <a class="btn" href="search.html">Back to Search</a>
+                <button id="logoutBtn" class="btn danger">Logout</button>
+            </div>
+
+            <div class="muted" style="margin: 10px 0 6px;">Your playlists:</div>
+            <ul id="playlistList" class="playlist-list"></ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <header>
+                <div>
+                    <h2 id="pageTitle" style="margin: 0;">Playlists</h2>
+                    <div id="subtitle" class="muted"></div>
+                </div>
+
+                <div class="userbox">
+                    <img id="userImg" alt="user" />
+                    <div>
+                        <div><b id="userName">...</b></div>
+                        <div class="small muted">Logged in</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="controls">
+                <input id="filterInput" type="text" placeholder="Search video by name..." />
+                <select id="sortSelect">
+                    <option value="newest">Sort: Newest</option>
+                    <option value="oldest">Sort: Oldest</option>
+                    <option value="az">Sort: A → Z</option>
+                    <option value="za">Sort: Z → A</option>
+                </select>
+            </div>
+
+            <div id="mainArea"></div>
+        </main>
+    </div>
+
+    <!-- Create Playlist Modal -->
+    <dialog id="newPlDialog">
+        <h3 style="margin-top:0;">Create new playlist</h3>
+        <div class="modal-row">
+            <label for="newPlName">Playlist name</label>
+            <input id="newPlName" type="text" placeholder="e.g. Drum practice" style="width:100%;" />
+        </div>
+        <div class="modal-actions">
+            <button id="cancelNewPl" class="btn">Cancel</button>
+            <button id="createNewPl" class="btn primary">Create</button>
+        </div>
+    </dialog>
+
+    <script>
+        // ----------------------------
+        // Storage helpers (match your structure)
+        // ----------------------------
+        function getCurrentUser() {
+            const raw = sessionStorage.getItem("currentUser");
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        function getPlaylists() {
+            const raw = localStorage.getItem("playlists");
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function savePlaylists(playlists) {
+            localStorage.setItem("playlists", JSON.stringify(playlists));
+        }
+
+        function getUserPlaylists(username) {
+            return getPlaylists().filter(p => (p.owner || "").toLowerCase() === username.toLowerCase());
+        }
+
+        function findPlaylistById(id) {
+            return getPlaylists().find(p => p.id === id) || null;
+        }
+
+        function setQueryParam(key, val) {
+            const url = new URL(window.location.href);
+            if (val) url.searchParams.set(key, val);
+            else url.searchParams.delete(key);
+            history.replaceState({}, "", url.toString());
+        }
+
+        function getQueryParam(key) {
+            return new URL(window.location.href).searchParams.get(key) || "";
+        }
+
+        function normalizeTitle(str) {
+            return (str || "").toLowerCase().trim();
+        }
+
+        // ----------------------------
+        // Auth guard + header user
+        // ----------------------------
+        const user = getCurrentUser();
+        if (!user) {
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("userName").textContent = user.username || (user.firstName + " " + user.lastName);
+        document.getElementById("userImg").src = user.imageUrl || "";
+        document.getElementById("subtitle").textContent = "Choose a playlist from the left.";
+
+        // ----------------------------
+        // Render sidebar playlists
+        // ----------------------------
+        const playlistListEl = document.getElementById("playlistList");
+
+        function renderSidebar(activeId) {
+            const myLists = getUserPlaylists(user.username);
+            playlistListEl.innerHTML = "";
+
+            if (myLists.length === 0) {
+                playlistListEl.innerHTML = `<li class="muted">No playlists yet. Create one.</li>`;
+                return;
+            }
+
+            for (const pl of myLists) {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.className = "pl-link" + (pl.id === activeId ? " active" : "");
+                a.href = `playlists.html?pl=${encodeURIComponent(pl.id)}`;
+                a.textContent = pl.name;
+                li.appendChild(a);
+                playlistListEl.appendChild(li);
+            }
+        }
+
+        // ----------------------------
+        // Render main content: selected playlist
+        // ----------------------------
+        const mainArea = document.getElementById("mainArea");
+        const filterInput = document.getElementById("filterInput");
+        const sortSelect = document.getElementById("sortSelect");
+
+        function sortItems(items, mode) {
+            const arr = [...items];
+            if (mode === "az") arr.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+            if (mode === "za") arr.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
+            if (mode === "oldest") arr.sort((a, b) => (a.addedAt || 0) - (b.addedAt || 0));
+            if (mode === "newest") arr.sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+            return arr;
+        }
+
+        function ensureAddedAt(pl) {
+            // If you didn’t store addedAt before, we add it now to existing items (one-time fix).
+            let changed = false;
+            for (const it of (pl.items || [])) {
+                if (!it.addedAt) {
+                    it.addedAt = Date.now();
+                    changed = true;
+                }
+            }
+            if (changed) {
+                const all = getPlaylists();
+                const idx = all.findIndex(x => x.id === pl.id);
+                if (idx >= 0) {
+                    all[idx] = pl;
+                    savePlaylists(all);
+                }
+            }
+        }
+
+        function renderPlaylist(plId) {
+            const pl = findPlaylistById(plId);
+
+            // invalid / not belongs to this user
+            if (!pl || (pl.owner || "").toLowerCase() !== user.username.toLowerCase()) {
+                mainArea.innerHTML = `<div class="msg">Choose a playlist from the left.</div>`;
+                document.getElementById("pageTitle").textContent = "Playlists";
+                return;
+            }
+
+            ensureAddedAt(pl);
+
+            document.getElementById("pageTitle").textContent = pl.name;
+
+            const term = normalizeTitle(filterInput.value);
+            let items = (pl.items || []);
+
+            if (term) {
+                items = items.filter(it => normalizeTitle(it.title).includes(term));
+            }
+
+            items = sortItems(items, sortSelect.value);
+
+            if (items.length === 0) {
+                mainArea.innerHTML = `<div class="msg">No videos found in this playlist.</div>`;
+                return;
+            }
+
+            const table = document.createElement("table");
+            table.innerHTML = `
+      <thead>
+        <tr>
+          <th style="width:180px;">Thumbnail</th>
+          <th>Details</th>
+          <th style="width:260px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
+
+            const tbody = table.querySelector("tbody");
+
+            const myLists = getUserPlaylists(user.username);
+
+            for (const it of items) {
+                const tr = document.createElement("tr");
+
+                const thumbTd = document.createElement("td");
+                thumbTd.innerHTML = `
+        <a target="_blank" href="https://www.youtube.com/watch?v=${encodeURIComponent(it.videoId)}">
+          <img class="thumb" src="${it.thumb || ""}" alt="thumb">
+        </a>
+      `;
+
+                const detailsTd = document.createElement("td");
+                detailsTd.innerHTML = `
+        <div class="title">${it.title || ""}</div>
+        <div class="small">Channel: ${it.channel || ""}</div>
+        <div class="small">Duration: ${it.duration || ""} | Views: ${it.views || ""}</div>
+        <div class="small muted">Video ID: ${it.videoId}</div>
+      `;
+
+                const actionsTd = document.createElement("td");
+                actionsTd.innerHTML = `
+        <div class="row-actions">
+          <button class="btn danger removeBtn">Remove</button>
+
+          <select class="moveSelect">
+            <option value="">Move to...</option>
+            ${myLists
+                        .filter(x => x.id !== pl.id)
+                        .map(x => `<option value="${x.id}">${x.name}</option>`)
+                        .join("")}
+          </select>
+          <button class="btn moveBtn">Move</button>
+        </div>
+      `;
+
+                // Remove
+                actionsTd.querySelector(".removeBtn").addEventListener("click", () => {
+                    const all = getPlaylists();
+                    const p = all.find(x => x.id === pl.id);
+                    if (!p) return;
+
+                    p.items = (p.items || []).filter(v => v.videoId !== it.videoId);
+                    savePlaylists(all);
+
+                    renderSidebar(pl.id);
+                    renderPlaylist(pl.id);
+                });
+
+                // Move
+                actionsTd.querySelector(".moveBtn").addEventListener("click", () => {
+                    const toId = actionsTd.querySelector(".moveSelect").value;
+                    if (!toId) return alert("Choose a playlist to move to.");
+
+                    const all = getPlaylists();
+                    const from = all.find(x => x.id === pl.id);
+                    const to = all.find(x => x.id === toId);
+                    if (!from || !to) return;
+
+                    // remove from source
+                    from.items = (from.items || []).filter(v => v.videoId !== it.videoId);
+
+                    // add to target (avoid duplicates)
+                    const exists = (to.items || []).some(v => v.videoId === it.videoId);
+                    if (!exists) {
+                        to.items = to.items || [];
+                        to.items.push({ ...it, addedAt: Date.now() });
+                    }
+
+                    savePlaylists(all);
+
+                    renderSidebar(from.id);
+                    renderPlaylist(from.id);
+                });
+
+                tr.appendChild(thumbTd);
+                tr.appendChild(detailsTd);
+                tr.appendChild(actionsTd);
+
+                tbody.appendChild(tr);
+            }
+
+            mainArea.innerHTML = "";
+            mainArea.appendChild(table);
+        }
+
+        // ----------------------------
+        // Select playlist by querystring (pl)
+        // ----------------------------
+        function pickInitialPlaylist() {
+            const myLists = getUserPlaylists(user.username);
+            const qs = getQueryParam("pl");
+
+            if (qs) {
+                const exists = myLists.some(p => p.id === qs);
+                if (exists) return qs;
+            }
+
+            // if no qs, select first playlist (required behavior)
+            return myLists.length ? myLists[0].id : "";
+        }
+
+        // ----------------------------
+        // New playlist modal
+        // ----------------------------
+        const dialog = document.getElementById("newPlDialog");
+        document.getElementById("newPlaylistBtn").addEventListener("click", () => {
+            document.getElementById("newPlName").value = "";
+            if (typeof dialog.showModal === "function") dialog.showModal();
+            else {
+                // fallback if dialog not supported
+                const name = prompt("New playlist name:");
+                if (name) createPlaylist(name.trim());
+            }
+        });
+
+        document.getElementById("cancelNewPl").addEventListener("click", () => dialog.close());
+        document.getElementById("createNewPl").addEventListener("click", () => {
+            const name = document.getElementById("newPlName").value.trim();
+            if (!name) return alert("Please enter a playlist name.");
+            dialog.close();
+            createPlaylist(name);
+        });
+
+        function createPlaylist(name) {
+            const all = getPlaylists();
+
+            const pl = {
+                id: "pl_" + Date.now(),
+                owner: user.username,
+                name,
+                items: []
+            };
+
+            all.push(pl);
+            savePlaylists(all);
+
+            // go to it (querystring)
+            setQueryParam("pl", pl.id);
+            renderSidebar(pl.id);
+            renderPlaylist(pl.id);
+        }
+
+        // ----------------------------
+        // Controls events
+        // ----------------------------
+        filterInput.addEventListener("input", () => {
+            const activeId = getQueryParam("pl");
+            renderPlaylist(activeId);
+        });
+
+        sortSelect.addEventListener("change", () => {
+            const activeId = getQueryParam("pl");
+            renderPlaylist(activeId);
+        });
+
+        // logout
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            sessionStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        });
+
+        // ----------------------------
+        // Boot
+        // ----------------------------
+        const initialPl = pickInitialPlaylist();
+        renderSidebar(initialPl);
+
+        if (initialPl) {
+            setQueryParam("pl", initialPl);
+            renderPlaylist(initialPl);
+        } else {
+            mainArea.innerHTML = `<div class="msg">No playlists yet. Create one from the left.</div>`;
+        }
+    </script>
+</body>
+
+</html>
